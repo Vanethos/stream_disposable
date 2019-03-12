@@ -38,10 +38,10 @@ class StreamDisposable {
     _subscriptions.add(subscription);
   }
 
-  void dispose({String className = ""}) {
+  Future<void> dispose({String className = ""}) async {
     debugPrint("Disposing $className");
     if (_subscriptions.isNotEmpty) {
-      _subscriptions.forEach((sub) => sub?.cancel());
+      await Future.wait(_subscriptions.map((sub) => sub?.cancel()));
     }
   }
 }
