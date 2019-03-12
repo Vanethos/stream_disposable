@@ -71,6 +71,8 @@ class StreamDisposable {
   ///
   /// In the same way, if the disposable is already disposed, this method will
   /// throw an exception
+  ///
+  /// className: Class name to appear in the debugPrint statement
   Future<void> dispose({String className = ""}) async {
     if (_isDisposing) {
       throw Exception("Already disposing");
