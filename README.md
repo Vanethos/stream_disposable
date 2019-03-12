@@ -1,14 +1,24 @@
-# stream_disposable
+[![Build Status](https://travis-ci.com/Vanethos/stream_disposable.svg?token=xwLpqqTE7aAFrSqs6UQm&branch=master)](https://travis-ci.com/Vanethos/stream_disposable)
 
-Package to help disposing streams
+# Stream Disposable
 
-## Getting Started
+Package to help disposing Streams and Sinks.
 
-This project is a starting point for a Dart
-[package](https://flutter.io/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+## Usage
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Instantiate a disposable with
+ 
+    var disposable = StreamDisposable()
+    
+Add StreamSubscriptions or Sinks to it by calling `add`
+ 
+   ```
+   var streamToDispose = Stream.fromIterable([1, 2, 3]);
+   disposable.add(streamToDispose.listen(print))
+   ```
+   
+In the Stateful's Widget `dispose` method or equivalent, we can call
+ 
+  `disposable.dispose(className: this.runtimeType.toString())`
+  
+To safely dispose every subscription.
