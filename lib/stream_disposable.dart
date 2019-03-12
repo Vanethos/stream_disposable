@@ -1,6 +1,7 @@
 library stream_disposable;
 
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 /// Helper Class that holds and disposes stream subscriptions, sinks and timers
@@ -21,7 +22,6 @@ import 'package:flutter/foundation.dart';
 ///
 /// To safely dispose every subscription
 class StreamDisposable {
-
   StreamDisposable();
 
   List<StreamSubscription> _streamsSubscriptions = List();
@@ -34,7 +34,7 @@ class StreamDisposable {
   bool _isDisposing = false;
 
   /// Future that completes when the StreamDisposable finishes disposing
-  Future<void> get didDispose  => _didDispose.future;
+  Future<void> get didDispose => _didDispose.future;
 
   /// Adds a Stream Subscription or Sink to be disposed in the future
   ///
@@ -62,7 +62,7 @@ class StreamDisposable {
   }
 
   /// Dipose Resources
-  /// 
+  ///
   /// This method will dispose all the Stream Subscriptions and Sinks that were
   /// added to the StreamDisposable.
   ///
@@ -83,7 +83,8 @@ class StreamDisposable {
     Future<void> subscriptionFuture;
     Future<void> sinkFuture;
     if (_streamsSubscriptions.isNotEmpty) {
-      subscriptionFuture = Future.wait(_streamsSubscriptions.map((sub) => sub?.cancel()));
+      subscriptionFuture =
+          Future.wait(_streamsSubscriptions.map((sub) => sub?.cancel()));
     }
     if (_sinks.isNotEmpty) {
       sinkFuture = Future.sync(() => _sinks.map((sink) => sink?.close()));
@@ -105,5 +106,6 @@ class TypeNotSupported extends Error {
   TypeNotSupported({this.type = "N/A"});
 
   @override
-  String toString() => "Type is not supported, please provide an object of type Sink or StreamSubscription but is of type $type";
+  String toString() =>
+      "Type is not supported, please provide an object of type Sink or StreamSubscription but is of type $type";
 }

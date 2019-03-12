@@ -1,10 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/foundation.dart';
 import 'package:matcher/matcher.dart';
 import 'package:stream_disposable/stream_disposable.dart';
-
 
 void main() {
   test('Disposing a disposable with no data throws no error', () {
@@ -31,7 +29,8 @@ void main() {
     expect(disposable.isDisposed, true);
   });
 
-  test('Disposing with a subscription that has been disposed previously', () async {
+  test('Disposing with a subscription that has been disposed previously',
+      () async {
     var disposable = StreamDisposable();
 
     var streamController = StreamController<int>();
@@ -67,7 +66,8 @@ void main() {
   test('Wrong type throws an error', () {
     var disposable = StreamDisposable();
 
-    expect(() => disposable.add("test"), throwsA(TypeMatcher<TypeNotSupported>()));
+    expect(
+        () => disposable.add("test"), throwsA(TypeMatcher<TypeNotSupported>()));
   });
 
   test("Disposing two times throws an exception - dispose", () {
