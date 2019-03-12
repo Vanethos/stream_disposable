@@ -1,5 +1,5 @@
 name: stream_disposable
-description: Package to help disposing streams
+description: Package to help disposing Stream Subscriptions and Sink objects
 version: 0.0.1
 author:
 homepage:

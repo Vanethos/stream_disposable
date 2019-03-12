@@ -1,64 +1,87 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/foundation.dart';
-
+import 'package:matcher/matcher.dart';
 import 'package:stream_disposable/stream_disposable.dart';
 
+
 void main() {
-  test('dispose using disposable', () async {
-    var stream = Future.doWhile(() async {
-      //await Future.delayed(Duration(milliseconds: 300));
-      debugPrint("Listen ${DateTime.now()}");
-      return true;
-    }).asStream();
-
-    var disposed = false;
-
+  test('Disposing a disposable with no data throws no error', () {
     var disposable = StreamDisposable();
 
-    disposable.add(stream.listen((_) async {
-      if (disposed) {
-        //wait for it to be disposed
-        await Future.delayed(Duration(seconds: 1));
-        expect(actual, matcher)
-      }
-    }));
-
-
-    //idea: add to sink
-    await disposable.dispose();
-
-    disposed = true;
-
-    debugPrint("After disposing ${DateTime.now()}");
-
-
-    //expect(subscription.isPaused, true);
+    expect(disposable.dispose(), completes);
   });
 
-  test('dispose disposed subscription', () async {
-    var stream = Future.doWhile(() async {
-      //await Future.delayed(Duration(milliseconds: 300));
-      debugPrint("Listen ${DateTime.now()}");
-      return true;
-    }).asStream();
-
-    var disposed = false;
-
+  test('Adding correct types does not throw an error', () async {
     var disposable = StreamDisposable();
 
+    var streamController = StreamController<int>();
+    var sink = streamController.sink;
+    var stream = streamController.stream;
+
+    expect(disposable.isDisposed, false);
+
+    disposable.add(sink);
+    disposable.add(stream.listen(null));
+
+    expect(disposable.dispose(), completes);
+    expect(disposable.didDispose, completes);
+    await Future.delayed(Duration(seconds: 1));
+    expect(disposable.isDisposed, true);
+  });
+
+  test('Disposing with a subscription that has been disposed previously', () async {
+    var disposable = StreamDisposable();
+
+    var streamController = StreamController<int>();
+    var stream = streamController.stream;
     var subscription = stream.listen(null);
 
     disposable.add(subscription);
 
     await subscription.cancel();
 
-    await disposable.dispose();
+    expect(disposable.dispose(), completes);
+    expect(disposable.didDispose, completes);
+    await Future.delayed(Duration(seconds: 1));
+    expect(disposable.isDisposed, true);
+  });
 
-    await subscription.cancel();
+  test('Disposing with a sink that has been disposed previously', () async {
+    var disposable = StreamDisposable();
 
-    debugPrint("After disposing ${DateTime.now()}");
+    var streamController = StreamController<int>();
+    var sink = streamController.sink;
 
+    disposable.add(sink);
 
-    //expect(subscription.isPaused, true);
+    sink.close();
+
+    expect(disposable.dispose(), completes);
+    expect(disposable.didDispose, completes);
+    await Future.delayed(Duration(seconds: 1));
+    expect(disposable.isDisposed, true);
+  });
+
+  test('Wrong type throws an error', () {
+    var disposable = StreamDisposable();
+
+    expect(() => disposable.add("test"), throwsA(TypeMatcher<TypeNotSupported>()));
+  });
+
+  test("Disposing two times throws an exception - dispose", () {
+    var disposable = StreamDisposable();
+
+    disposable.dispose();
+    expect(disposable.dispose(), throwsException);
+  });
+
+  test("Disposing a disposed disposable throws an exception", () async {
+    var disposable = StreamDisposable();
+
+    disposable.dispose();
+    await Future.delayed(Duration(seconds: 1));
+    expect(disposable.dispose(), throwsException);
   });
 }
