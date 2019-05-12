@@ -1,6 +1,6 @@
 name: stream_disposable
 description: Package to help disposing Stream Subscriptions and Sink objects
-version: 0.0.1
+version: 0.1.0
 author: Gonçalo Palma <solid.goncalo@gmail.com>
 homepage: https://github.com/Vanethos/stream_disposable
 issue_tracker: https://github.com/Vanethos/stream_disposable/issues
