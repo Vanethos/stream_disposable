@@ -2,8 +2,6 @@ library stream_disposable;
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 /// Helper Class that holds and disposes stream subscriptions, sinks and timers
 ///
 /// We can instantiate this class by calling
@@ -81,7 +79,7 @@ class StreamDisposable {
       throw Exception("Already disposed");
     }
     _isDisposing = true;
-    debugPrint("Disposing $className");
+    print("Disposing $className");
     Future<void> subscriptionFuture;
     Future<void> sinkFuture;
     if (_streamsSubscriptions.isNotEmpty) {
