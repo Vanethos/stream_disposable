@@ -1,3 +1,6 @@
+## [1.0.0]
+ * Migrate to null-safety
+  
 ## [0.1.0]
  * Changed debugPrint for Print so that Flutter Web can use it
 
