@@ -22,8 +22,8 @@ import 'dart:async';
 class StreamDisposable {
   StreamDisposable();
 
-  List<StreamSubscription> _streamsSubscriptions = List();
-  List<Sink> _sinks = List();
+  List<StreamSubscription> _streamsSubscriptions = [];
+  List<Sink> _sinks = [];
 
   final Completer<Null> _didDispose = Completer<Null>();
 
@@ -80,14 +80,14 @@ class StreamDisposable {
     }
     _isDisposing = true;
     print("Disposing $className");
-    Future<void> subscriptionFuture;
-    Future<void> sinkFuture;
+    Future<void>? subscriptionFuture;
+    Future<void>? sinkFuture;
     if (_streamsSubscriptions.isNotEmpty) {
       subscriptionFuture =
-          Future.wait(_streamsSubscriptions.map((sub) => sub?.cancel()));
+          Future.wait(_streamsSubscriptions.map((sub) => sub.cancel()));
     }
     if (_sinks.isNotEmpty) {
-      sinkFuture = Future.sync(() => _sinks.map((sink) => sink?.close()));
+      sinkFuture = Future.sync(() => _sinks.map((sink) => sink.close()));
     }
     return Future.wait([
       subscriptionFuture ?? Future.value(null),
