@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -73,16 +73,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
     var controller = StreamController<int>();
     var sink = controller.sink;
     var stream = controller.stream;
-    disposable.add(
-      stream.listen((data) {
-        setState(() {
-          _counter = data;
-        });
-      })
-    );
+    disposable.add(stream.listen((data) {
+      setState(() {
+        _counter = data;
+      });
+    }));
 
     disposable.add(sink);
 
@@ -99,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// When pushing, we will dispose of the stream
   @override
   void deactivate() {
+    super.deactivate();
     disposable.dispose(className: this.runtimeType.toString());
   }
 }

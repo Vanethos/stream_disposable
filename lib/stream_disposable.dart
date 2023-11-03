@@ -79,7 +79,6 @@ class StreamDisposable {
       throw Exception("Already disposed");
     }
     _isDisposing = true;
-    print("Disposing $className");
     Future<void>? subscriptionFuture;
     Future<void>? sinkFuture;
     if (_streamsSubscriptions.isNotEmpty) {
